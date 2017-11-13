@@ -2,16 +2,10 @@
 <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <ImageView android:layout_width="0dp"
-               android:layout_height="0dp"
-               app:layout_constraintBottom_toBottomOf="parent"
-               app:layout_constraintTop_toTopOf="parent"
-               app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintEnd_toEndOf="parent"
-               android:id="@+id/imageView"/>
+
     <Button
             android:text="Import Image"
             android:layout_width="wrap_content"
@@ -43,4 +37,33 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
     />
+
+    <android.support.constraint.ConstraintLayout android:layout_width="0dp"
+                                                 android:layout_height="0dp"
+                                                 android:id="@+id/meme_layout"
+                                                 app:layout_constraintBottom_toBottomOf="parent"
+                                                 app:layout_constraintTop_toBottomOf="@id/gallery_button"
+                                                 app:layout_constraintEnd_toEndOf="parent"
+                                                 android:layout_marginEnd="8dp"
+                                                 app:layout_constraintStart_toStartOf="parent"
+                                                 android:layout_marginStart="8dp">
+        <ImageView android:layout_width="0dp"
+                   android:layout_height="0dp"
+                   app:layout_constraintBottom_toBottomOf="parent"
+                   app:layout_constraintTop_toTopOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   android:id="@+id/imageView"/>
+        <TextView
+                android:text="MEMED"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp" android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@android:color/white" android:textStyle="bold" android:textAlignment="center"/>
+    </android.support.constraint.ConstraintLayout>
+
 </android.support.constraint.ConstraintLayout>
