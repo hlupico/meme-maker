@@ -1,4 +1,4 @@
-package com.example.hlupico.mememaker;
+package com.retailmenot.chicktechsandbox;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.new_meme_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, NewMemeActivity.class);
+                Intent intent = new Intent(com.retailmenot.chicktechsandbox.MainActivity.this, com.retailmenot.chicktechsandbox.NewMemeActivity.class);
                 startActivity(intent);
             }
         });
