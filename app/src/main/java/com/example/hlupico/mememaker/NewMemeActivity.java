@@ -3,7 +3,10 @@ package com.example.hlupico.mememaker;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -11,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import java.io.IOException;
 
 /**
  * Created by melder on 11/17/17.
@@ -61,7 +66,10 @@ public class NewMemeActivity extends AppCompatActivity {
         if (cameraPermissionGranted == false) {
             ActivityCompat.requestPermissions(this, CAMERA_PERMISSION, REQUEST_CODE_CAMERA);
         } else {
-            //TODO: when permission is granted, open camera
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) { // device has a camera app
+                startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PHOTO);
+            }
         }
     }
 
@@ -71,7 +79,12 @@ public class NewMemeActivity extends AppCompatActivity {
         if (storageReadPermissionGranted == false) {
             ActivityCompat.requestPermissions(this, GALLERY_PERMISSION, REQUEST_CODE_GALLERY);
         } else {
-            //TODO: when permission is granted, open gallery
+            Intent intent = new Intent();
+            // Show only images, no videos or anything else
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            // Always show the chooser (if there are multiple options available)
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_CODE_CHOOSE_PHOTO);
         }
     }
 
@@ -90,6 +103,23 @@ public class NewMemeActivity extends AppCompatActivity {
                 openGallery();
             } else {
                 Toast.makeText(this, "Need permissions to select a photo", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            //TODO: do something with the image
+        } else if (requestCode == REQUEST_CODE_CHOOSE_PHOTO && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                //todo: do something with the image
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
