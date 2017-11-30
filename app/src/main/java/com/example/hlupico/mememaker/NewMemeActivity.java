@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -107,17 +108,22 @@ public class NewMemeActivity extends AppCompatActivity {
         }
     }
 
+    private void setThumbnail(Bitmap image) {
+        ImageView thumbnail = (ImageView)findViewById(R.id.image_thumbnail);
+        thumbnail.setImageBitmap(image);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            //TODO: do something with the image
+            setThumbnail(imageBitmap);
         } else if (requestCode == REQUEST_CODE_CHOOSE_PHOTO && resultCode == RESULT_OK) {
             Uri uri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                //todo: do something with the image
+                setThumbnail(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
