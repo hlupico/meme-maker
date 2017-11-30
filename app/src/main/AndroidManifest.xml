@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.hlupico.mememaker">
 
+<!--uncomment these lines to tell the system that you're going to request these permissions-->
+    <!--<uses-permission android:name="android.permission.CAMERA"/>-->
+    <!--<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>-->
 
     <application
         android:allowBackup="true"
