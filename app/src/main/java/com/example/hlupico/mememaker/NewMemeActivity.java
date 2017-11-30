@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 /**
  * Created by melder on 11/17/17.
@@ -55,21 +56,42 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     private void openCamera() {
-        // TODO: Check for permission to use camera
-
-        //TODO: when permission is granted, open camera
+        boolean cameraPermissionGranted = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED;
+        if (cameraPermissionGranted == false) {
+            ActivityCompat.requestPermissions(this, CAMERA_PERMISSION, REQUEST_CODE_CAMERA);
+        } else {
+            //TODO: when permission is granted, open camera
+        }
     }
 
     private void openGallery() {
-        //TODO: Check for permission to view gallery
-
-        //TODO: when permission is granted, open gallery
+        boolean storageReadPermissionGranted = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_GRANTED;
+        if (storageReadPermissionGranted == false) {
+            ActivityCompat.requestPermissions(this, GALLERY_PERMISSION, REQUEST_CODE_GALLERY);
+        } else {
+            //TODO: when permission is granted, open gallery
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        //TODO: take action if permissions are granted
+        if (requestCode == REQUEST_CODE_CAMERA) {
+            // did the user give us permission?
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(this, "Need permissions to take a photo", Toast.LENGTH_LONG).show();
+            }
+        } else if (requestCode == REQUEST_CODE_GALLERY) {
+            // did the user give us permission?
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openGallery();
+            } else {
+                Toast.makeText(this, "Need permissions to select a photo", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override
