@@ -8,7 +8,6 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -98,7 +97,7 @@ public class NewMemeActivity extends AppCompatActivity {
             // the one with the 'Take Photo` text, is clicked by the user.
             @Override
             public void onClick(View view) {
-                goToCamera();
+                enterTakePictureFlow();
             }
         };
 
@@ -107,12 +106,15 @@ public class NewMemeActivity extends AppCompatActivity {
 
     /**
      * Day 2, Step 1
-     * The openCamera() method is responsible for requesting camera permissions if
-     * the user has not already granted the app camera permissions and for opening the camera.
      *
-     * TODO: Consider breaking this logic up further to be something like `openCamera` and `checkForPermissions`
+     * The enterTakePictureFlow method is responsible for managing the sequence of events
+     * that need to occur before a user can navigate to the Camera. This method:
+     *
+     * (1) Checks that the user has granted the app `CAMERA` permissions
+     * (2) If app HASN'T been granted permission, request `CAMERA` permission
+     * (3) If app HAS been granted permission, open camera : )
      */
-    private void goToCamera() {
+    private void enterTakePictureFlow() {
         // Check to see if the user has given the app camera permissions.
         boolean cameraPermissionGranted = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED;
@@ -128,6 +130,8 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
+     * Day 2, Step 1
+     *
      * The openCamera() method will:
      * (1) Creates an Intent named `takePictureIntent` to access the camera
      * (2) Checks that the device has a camera
@@ -139,16 +143,16 @@ public class NewMemeActivity extends AppCompatActivity {
             startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PHOTO);
         }
 
-        // TODO: Question for students
         // Day 2, Step 4
+        // TODO: Question for students
         // What will happen if the user DOES NOT have a camera on their device?
         // How can we improve the experience for these users?
     }
 
     /**
      * Day 2, Step 2
-     * This method takes no method arguments and
-     * will return the OnClickListener for the galleryButton
+     *
+     * The getGalleryOnClickListener() will return the OnClickListener for the galleryButton
      */
     private View.OnClickListener getGalleryOnClickListener() {
         View.OnClickListener galleryOnClickListener = new View.OnClickListener() {
@@ -156,14 +160,24 @@ public class NewMemeActivity extends AppCompatActivity {
             // the one with the 'From Gallery` text, is clicked by the user.
             @Override
             public void onClick(View view) {
-                goToGallery();
+                enterGalleryFlow();
             }
         };
 
         return galleryOnClickListener;
     }
 
-    private void goToGallery() {
+    /**
+     * Day 2, Step 2
+     *
+     * The enterGalleryFlow method is responsible for managing the sequence of events
+     * that need to occur before a user can navigate to the Galley. This method:
+     *
+     * (1) Checks that the user has granted the app `READ_EXTERNAL_STORAGE` permissions
+     * (2) If app HASN'T been granted permission, request `READ_EXTERNAL_STORAGE` permission
+     * (3) If app HAS been granted permission, open gallery : )
+     */
+    private void enterGalleryFlow() {
         boolean storageReadPermissionGranted = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_GRANTED;
         if (storageReadPermissionGranted == false) {
@@ -175,26 +189,35 @@ public class NewMemeActivity extends AppCompatActivity {
 
     /**
      * Day 2, Step 2
+     *
+     * The openGallery() method will:
+     * (1) Creates an Intent named `galleryIntent` to access the camera
+     * (3) Uses `galleryIntent` to start the camera.
      */
     private void openGallery() {
-        // TODO: Create an Intent called galleryIntent
-        Intent galleryIntent = new Intent();
+        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+
+        // ***I think this line will
         // Show only images, no videos or anything else
         galleryIntent.setType("image/*");
-        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-        // Always show the chooser (if there are multiple options available)
-        startActivityForResult(Intent.createChooser(galleryIntent, "Select Picture"), REQUEST_CODE_CHOOSE_PHOTO);
 
+        // Always show the chooser (if there are multiple options available)
+        galleryIntent = Intent.createChooser(galleryIntent, "Select Picture");
+
+        // Start Activity
+        startActivityForResult(galleryIntent, REQUEST_CODE_CHOOSE_PHOTO);
     }
 
     /**
      * Day 2, Step 3
+     *
+     * This method will return the OnClickListener for the saveButton
      */
     private View.OnClickListener getSaveOnClickListener() {
         View.OnClickListener saveOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveMeme();
+                enterSaveMemeFlow();
             }
         };
 
@@ -203,41 +226,58 @@ public class NewMemeActivity extends AppCompatActivity {
 
     /**
      * Day 2, Step 3
+     *
+     * The enterSaveMemeFlow method is responsible for managing the sequence of events
+     * that need to occur before a user can save a photo. This method:
+     *
+     * (1) Checking that the user has granted the app `WRITE_EXTERNAL_STORAGE` permissions
+     * (2) If app HASN'T been granted permission, request `WRITE_EXTERNAL_STORAGE` permission
+     * (3) If app HAS been granted permission, save meme : )
      */
-    private void saveMeme() {
+    private void enterSaveMemeFlow() {
         boolean storageWritePermissionGranted = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_GRANTED;
         if (!storageWritePermissionGranted) {
             ActivityCompat.requestPermissions(this, SAVE_PERMISSION, REQUEST_CODE_SAVE);
         } else {
-            View memeLayout = findViewById(R.id.meme);
-            memeLayout.setDrawingCacheEnabled(true);
-            memeLayout.buildDrawingCache();
-            Bitmap full = memeLayout.getDrawingCache();
-            //todo: what are the other cases/should we worry about them?
-            if (Environment.getExternalStorageState().equalsIgnoreCase("mounted")) {
-                File imageFolder = new File(Environment.getExternalStorageDirectory(), "memes");
-                imageFolder.mkdirs();
-                FileOutputStream out = null;
-                File imageFile = new File(imageFolder, String.valueOf(System.currentTimeMillis()) + ".png");
-                try {
-                    out = new FileOutputStream(imageFile);
-                    full.compress(Bitmap.CompressFormat.PNG, 100, out);
-                    out.flush();
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    out = null;
-                    MediaScannerConnection.scanFile(this, new String[] {imageFile.getAbsolutePath()}, null, null);
-                }
-            }
-            memeLayout.destroyDrawingCache();
-            memeLayout.setDrawingCacheEnabled(false);
-            Toast.makeText(this, "Saved to memes folder!", Toast.LENGTH_LONG).show();
+            saveMeme();
         }
     }
 
+    /**
+     * TODO: ADD DOCS
+     */
+    private void saveMeme() {
+        View memeLayout = findViewById(R.id.meme);
+        memeLayout.setDrawingCacheEnabled(true);
+        memeLayout.buildDrawingCache();
+        Bitmap full = memeLayout.getDrawingCache();
+        //todo: what are the other cases/should we worry about them?
+        if (Environment.getExternalStorageState().equalsIgnoreCase("mounted")) {
+            File imageFolder = new File(Environment.getExternalStorageDirectory(), "memes");
+            imageFolder.mkdirs();
+            FileOutputStream out = null;
+            File imageFile = new File(imageFolder, String.valueOf(System.currentTimeMillis()) + ".png");
+            try {
+                out = new FileOutputStream(imageFile);
+                full.compress(Bitmap.CompressFormat.PNG, 100, out);
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                out = null;
+                MediaScannerConnection.scanFile(this, new String[]{imageFile.getAbsolutePath()}, null, null);
+            }
+        }
+        memeLayout.destroyDrawingCache();
+        memeLayout.setDrawingCacheEnabled(false);
+        Toast.makeText(this, "Saved to memes folder!", Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * TODO: ADD DOCS
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         /**
@@ -264,6 +304,9 @@ public class NewMemeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * TODO: ADD DOCS
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         /**
