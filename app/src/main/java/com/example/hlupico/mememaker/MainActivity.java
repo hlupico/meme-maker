@@ -8,6 +8,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setElevation(0f);  /** Step 1 - remove automatic action bar shadow */
     }
 }
