@@ -59,7 +59,7 @@ public class NewMemeActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         /**
-         * Day 2, Step 1
+         * Step 3
          */
         // Get reference for cameraButton, create OnClickListener for
         // cameraButton and set OnclickListener for cameraButton
@@ -68,7 +68,7 @@ public class NewMemeActivity extends AppCompatActivity {
         cameraButton.setOnClickListener(cameraButtonOnClick);
 
         /**
-         * Day 2, Step 2
+         * Step 4
          */
         // Get reference for galleryButton, create OnClickListener for
         // galleryButton and set OnclickListener for galleryButton
@@ -77,7 +77,7 @@ public class NewMemeActivity extends AppCompatActivity {
         galleryButton.setOnClickListener(galleryButtonOnClick);
 
         /**
-         * Day 2, Step 3
+         * Step 5
          */
         // Get reference for saveButton, create OnClickListener for
         // saveButton and set OnclickListener for saveButton
@@ -87,7 +87,7 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * Day 2, Step 1
+     * Step 3
      * This method takes no method arguments and
      * will return the OnClickListener for the cameraButton
      */
@@ -105,7 +105,7 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * Day 2, Step 1
+     * Step 3
      *
      * The enterTakePictureFlow method is responsible for managing the sequence of events
      * that need to occur before a user can navigate to the Camera. This method:
@@ -130,7 +130,7 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * Day 2, Step 1
+     * Step 3
      *
      * The openCamera() method will:
      * (1) Creates an Intent named `takePictureIntent` to access the camera
@@ -150,7 +150,7 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * Day 2, Step 2
+     * Step 4
      *
      * The getGalleryOnClickListener() will return the OnClickListener for the galleryButton
      */
@@ -168,7 +168,7 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * Day 2, Step 2
+     * Step 4
      *
      * The enterGalleryFlow method is responsible for managing the sequence of events
      * that need to occur before a user can navigate to the Galley. This method:
@@ -188,7 +188,7 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * Day 2, Step 2
+     * Step 4
      *
      * The openGallery() method will:
      * (1) Creates an Intent named `galleryIntent` to access the camera
@@ -209,7 +209,7 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * Day 2, Step 3
+     * Step 5
      *
      * This method will return the OnClickListener for the saveButton
      */
@@ -225,7 +225,7 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * Day 2, Step 3
+     * Step 5
      *
      * The enterSaveMemeFlow method is responsible for managing the sequence of events
      * that need to occur before a user can save a photo. This method:
@@ -245,14 +245,17 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: ADD DOCS
+     * Step 5
+     *
+     * The saveMeme() will take the image we see on the thumbnail
+     * in the form of a Bitmap (a type of file that stores an image)
+     * and create a file for the image in the "memes" folder.
      */
     private void saveMeme() {
         View memeLayout = findViewById(R.id.meme);
         memeLayout.setDrawingCacheEnabled(true);
         memeLayout.buildDrawingCache();
         Bitmap full = memeLayout.getDrawingCache();
-        //todo: what are the other cases/should we worry about them?
         if (Environment.getExternalStorageState().equalsIgnoreCase("mounted")) {
             File imageFolder = new File(Environment.getExternalStorageDirectory(), "memes");
             imageFolder.mkdirs();
@@ -276,12 +279,15 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: ADD DOCS
+     * ActivityCompat will call this method when it is done checking for permissions.
+     * @param requestCode - is the request code used when ActivityCompat.requestPermissions() was called.
+     * @param permissions - is the type of permission we requested
+     * @param grantResults - can we used to determine if permissions were or were not granted.
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         /**
-         * Day 2, Step 1
+         * Step 3
          */
         if (requestCode == REQUEST_CODE_CAMERA) {
             // did the user give us permission?
@@ -292,7 +298,7 @@ public class NewMemeActivity extends AppCompatActivity {
             }
         }
         /**
-         * Day 2, Step 2
+         * Step 4
          */
         else if (requestCode == REQUEST_CODE_GALLERY) {
             // did the user give us permission?
@@ -305,12 +311,18 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: ADD DOCS
+     * Called when an Activity you launched from this Activity exits, giving you:
+     * (1) the requestCode you started it with,
+     * (2) resultCode it returned,
+     * (3) and any additional data from it.
+     *
+     * The resultCode will be RESULT_CANCELED if the activity explicitly returned that,
+     * didn't return any result, or crashed during its operation.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         /**
-         * Day 2, Step 1
+         * Step 3
          */
         if (requestCode == REQUEST_CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
@@ -318,7 +330,7 @@ public class NewMemeActivity extends AppCompatActivity {
             setThumbnail(imageBitmap);
         }
         /**
-         * Day 2, Step 2
+         * Step 4
          */
         else if (requestCode == REQUEST_CODE_CHOOSE_PHOTO && resultCode == RESULT_OK) {
             Uri imageUri = data.getData();
