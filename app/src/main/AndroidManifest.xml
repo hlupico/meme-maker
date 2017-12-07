@@ -23,8 +23,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".NewMemeActivity"
-                  android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
