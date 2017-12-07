@@ -1,5 +1,6 @@
 <resources>
 
+    <!-- Step 1 -->
     <!-- Base application theme  -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -7,31 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Step 1 -->
     <style name="Button">
         <item name="android:backgroundTint">@color/colorPrimary</item>
         <item name="android:textColor">#FFF</item>
     </style>
 
+    <!-- Step 1 -->
     <style name="Button.Primary">
         <item name="android:backgroundTint">@color/colorPrimaryDark</item>
-    </style>
-
-    <style name="MemeText">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:paddingTop">15dp</item>
-        <item name="android:paddingBottom">15dp</item>
-        <item name="android:paddingStart">30dp</item>
-        <item name="android:paddingEnd">30dp</item>
-
-        <!-- shadow/outline effect (barely noticeable, can be removed) -->
-        <item name="android:shadowColor">#000</item>
-        <item name="android:shadowDx">0.0</item>
-        <item name="android:shadowDy">0.0</item>
-        <item name="android:shadowRadius">3.0</item>
     </style>
 
 </resources>
