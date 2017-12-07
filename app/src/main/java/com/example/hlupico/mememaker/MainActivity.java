@@ -10,8 +10,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setElevation(0f);
+        getSupportActionBar().setElevation(0f);  /** Step 1 - remove automatic action bar shadow */
 
+        /** Step 2 - start New Meme Activity when button is clicked on */
         findViewById(R.id.new_meme_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
