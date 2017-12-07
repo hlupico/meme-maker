@@ -32,8 +32,6 @@ import java.io.IOException;
  *      (4) Add top and bottom meme text to photo
  *      (5) See preview of meme
  *      (6) Save the meme :)
- *
- * TODO: Break code into branches that correspond to the Day x, Step x in the comments
  */
 public class NewMemeActivity extends AppCompatActivity {
 
