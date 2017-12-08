@@ -35,14 +35,14 @@ import java.io.IOException;
  */
 public class NewMemeActivity extends AppCompatActivity {
 
-    private static final int REQUEST_CODE_SAVE = 44;
     private static final int REQUEST_CODE_CAMERA = 55;
-    private static final int REQUEST_CODE_GALLERY = 66;
+    // TODO: Create an integer variable, REQUEST_CODE_GALLERY
+
     private static final int REQUEST_CODE_TAKE_PHOTO = 77;
-    private static final int REQUEST_CODE_CHOOSE_PHOTO = 88;
+    // TODO: Create an integer variable, REQUEST_CODE_CHOOSE_PHOTO
+
     private static final String[] CAMERA_PERMISSION = {Manifest.permission.CAMERA};
-    private static final String[] GALLERY_PERMISSION = {Manifest.permission.READ_EXTERNAL_STORAGE};
-    private static final String[] SAVE_PERMISSION = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    // TODO: Create a variable that is an array of Strings, GALLERY_PERMISSION
 
     /**
      * onCreate() will be called it is launched from {@link MainActivity}
@@ -56,36 +56,20 @@ public class NewMemeActivity extends AppCompatActivity {
         setTitle("Make New Meme");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        /**
-         * Step 3
-         */
         // Get reference for cameraButton, create OnClickListener for
         // cameraButton and set OnclickListener for cameraButton
         Button cameraButton = (Button) findViewById(R.id.camera_button);
         View.OnClickListener cameraButtonOnClick = getCameraOnClickListener();
         cameraButton.setOnClickListener(cameraButtonOnClick);
 
-        /**
-         * Step 4
-         */
-        // Get reference for galleryButton, create OnClickListener for
-        // galleryButton and set OnclickListener for galleryButton
-        Button galleryButton = (Button) findViewById(R.id.gallery_button);
-        View.OnClickListener galleryButtonOnClick = getGalleryOnClickListener();
-        galleryButton.setOnClickListener(galleryButtonOnClick);
+        // TODO: Get reference for galleryButton
 
-        /**
-         * Step 5
-         */
-        // Get reference for saveButton, create OnClickListener for
-        // saveButton and set OnclickListener for saveButton
-        Button saveButton = (Button) findViewById(R.id.save_button);
-        View.OnClickListener saveButtonOnClick = getSaveOnClickListener();
-        saveButton.setOnClickListener(saveButtonOnClick);
+        // TODO: Create OnClickListener for galleryButton
+
+        // TODO: Set OnclickListener for galleryButton
     }
 
     /**
-     * Step 3
      * This method takes no method arguments and
      * will return the OnClickListener for the cameraButton
      */
@@ -103,8 +87,6 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * Step 3
-     *
      * The enterTakePictureFlow method is responsible for managing the sequence of events
      * that need to occur before a user can navigate to the Camera. This method:
      *
@@ -128,8 +110,6 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * Step 3
-     *
      * The openCamera() method will:
      * (1) Creates an Intent named `takePictureIntent` to access the camera
      * (2) Checks that the device has a camera
@@ -140,140 +120,41 @@ public class NewMemeActivity extends AppCompatActivity {
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) { // device has a camera app
             startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PHOTO);
         }
-
-        // Day 2, Step 4
-        // TODO: Question for students
-        // What will happen if the user DOES NOT have a camera on their device?
-        // How can we improve the experience for these users?
     }
 
     /**
-     * Step 4
-     *
-     * The getGalleryOnClickListener() will return the OnClickListener for the galleryButton
+     * TODO: Create a method name getGalleryOnClickListener()
+     * that takes no method arguments and will return the
+     * OnClickListener for the galleryButton
      */
-    private View.OnClickListener getGalleryOnClickListener() {
-        View.OnClickListener galleryOnClickListener = new View.OnClickListener() {
-            // This `onClick` should be called when the galleryButton,
-            // the one with the 'From Gallery` text, is clicked by the user.
-            @Override
-            public void onClick(View view) {
-                enterGalleryFlow();
-            }
-        };
 
-        return galleryOnClickListener;
-    }
 
     /**
-     * Step 4
-     *
-     * The enterGalleryFlow method is responsible for managing the sequence of events
-     * that need to occur before a user can navigate to the Galley. This method:
+     * TODO: Create a method, `enterGalleryFlow()`, that is responsible for managing
+     * the sequence of events that need to occur before a user can navigate to the Galler
+     * This method:
      *
      * (1) Checks that the user has granted the app `READ_EXTERNAL_STORAGE` permissions
      * (2) If app HASN'T been granted permission, request `READ_EXTERNAL_STORAGE` permission
      * (3) If app HAS been granted permission, open gallery : )
      */
-    private void enterGalleryFlow() {
-        boolean storageReadPermissionGranted = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_GRANTED;
-        if (storageReadPermissionGranted == false) {
-            ActivityCompat.requestPermissions(this, GALLERY_PERMISSION, REQUEST_CODE_GALLERY);
-        } else {
-            openGallery();
-        }
-    }
+
 
     /**
-     * Step 4
-     *
      * The openGallery() method will:
      * (1) Creates an Intent named `galleryIntent` to access the camera
      * (3) Uses `galleryIntent` to start the camera.
      */
     private void openGallery() {
+        // TODO: Create Intent, galleryIntent, with an Action that
+        // will open the gallery
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
 
-        // ***I think this line will
-        // Show only images, no videos or anything else
-        galleryIntent.setType("image/*");
+        // TODO: Uncomment two code once galleryIntent is creatd.
+//        galleryIntent.setType("image/*");
+//        galleryIntent = Intent.createChooser(galleryIntent, "Select Picture");
 
-        // Always show the chooser (if there are multiple options available)
-        galleryIntent = Intent.createChooser(galleryIntent, "Select Picture");
-
-        // Start Activity
-        startActivityForResult(galleryIntent, REQUEST_CODE_CHOOSE_PHOTO);
-    }
-
-    /**
-     * Step 5
-     *
-     * This method will return the OnClickListener for the saveButton
-     */
-    private View.OnClickListener getSaveOnClickListener() {
-        View.OnClickListener saveOnClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enterSaveMemeFlow();
-            }
-        };
-
-        return saveOnClickListener;
-    }
-
-    /**
-     * Step 5
-     *
-     * The enterSaveMemeFlow method is responsible for managing the sequence of events
-     * that need to occur before a user can save a photo. This method:
-     *
-     * (1) Checking that the user has granted the app `WRITE_EXTERNAL_STORAGE` permissions
-     * (2) If app HASN'T been granted permission, request `WRITE_EXTERNAL_STORAGE` permission
-     * (3) If app HAS been granted permission, save meme : )
-     */
-    private void enterSaveMemeFlow() {
-        boolean storageWritePermissionGranted = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_GRANTED;
-        if (!storageWritePermissionGranted) {
-            ActivityCompat.requestPermissions(this, SAVE_PERMISSION, REQUEST_CODE_SAVE);
-        } else {
-            saveMeme();
-        }
-    }
-
-    /**
-     * Step 5
-     *
-     * The saveMeme() will take the image we see on the thumbnail
-     * in the form of a Bitmap (a type of file that stores an image)
-     * and create a file for the image in the "memes" folder.
-     */
-    private void saveMeme() {
-        View memeLayout = findViewById(R.id.meme);
-        memeLayout.setDrawingCacheEnabled(true);
-        memeLayout.buildDrawingCache();
-        Bitmap full = memeLayout.getDrawingCache();
-        if (Environment.getExternalStorageState().equalsIgnoreCase("mounted")) {
-            File imageFolder = new File(Environment.getExternalStorageDirectory(), "memes");
-            imageFolder.mkdirs();
-            FileOutputStream out = null;
-            File imageFile = new File(imageFolder, String.valueOf(System.currentTimeMillis()) + ".png");
-            try {
-                out = new FileOutputStream(imageFile);
-                full.compress(Bitmap.CompressFormat.PNG, 100, out);
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                out = null;
-                MediaScannerConnection.scanFile(this, new String[]{imageFile.getAbsolutePath()}, null, null);
-            }
-        }
-        memeLayout.destroyDrawingCache();
-        memeLayout.setDrawingCacheEnabled(false);
-        Toast.makeText(this, "Saved to memes folder!", Toast.LENGTH_LONG).show();
+        // TODO: Start Activity for result.
     }
 
     /**
@@ -284,9 +165,6 @@ public class NewMemeActivity extends AppCompatActivity {
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        /**
-         * Step 3
-         */
         if (requestCode == REQUEST_CODE_CAMERA) {
             // did the user give us permission?
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -295,17 +173,11 @@ public class NewMemeActivity extends AppCompatActivity {
                 Toast.makeText(this, "Need permissions to take a photo", Toast.LENGTH_LONG).show();
             }
         }
-        /**
-         * Step 4
-         */
-        else if (requestCode == REQUEST_CODE_GALLERY) {
-            // did the user give us permission?
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openGallery();
-            } else {
-                Toast.makeText(this, "Need permissions to select a photo", Toast.LENGTH_LONG).show();
-            }
-        }
+
+        // TODO: Add a check to see if the requestCode returned matches REQUEST_CODE_GALLERY
+        // If the permission was not granted let the user know that they need to enable permissions
+
+
     }
 
     /**
@@ -319,18 +191,21 @@ public class NewMemeActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /**
-         * Step 3
-         */
+
+        // TODO: Change the assignment of canSetThumbnail to represent the following condition:
+        // (1) Evaluates to TRUE when requestCode is equal to REQUEST_CODE_CHOOSE_PHOTO
+        // AND resultCode is RESULT_OK.
+        //
+        // (2) Evaluates to FALSE if EITHER the requestCode does not equal REQUEST_CODE_CHOOSE_PHOTO
+        // OR resultCode is not RESULT_OK.
+        boolean canSetThumbail = true;
+
         if (requestCode == REQUEST_CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             setThumbnail(imageBitmap);
         }
-        /**
-         * Step 4
-         */
-        else if (requestCode == REQUEST_CODE_CHOOSE_PHOTO && resultCode == RESULT_OK) {
+        else if (canSetThumbail) {
             Uri imageUri = data.getData();
             try {
                 Bitmap image = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
