@@ -140,11 +140,6 @@ public class NewMemeActivity extends AppCompatActivity {
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) { // device has a camera app
             startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PHOTO);
         }
-
-        // Day 2, Step 4
-        // TODO: Question for students
-        // What will happen if the user DOES NOT have a camera on their device?
-        // How can we improve the experience for these users?
     }
 
     /**
@@ -195,7 +190,6 @@ public class NewMemeActivity extends AppCompatActivity {
     private void openGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
 
-        // ***I think this line will
         // Show only images, no videos or anything else
         galleryIntent.setType("image/*");
 
