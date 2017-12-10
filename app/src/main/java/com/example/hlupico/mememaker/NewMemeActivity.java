@@ -56,36 +56,20 @@ public class NewMemeActivity extends AppCompatActivity {
         setTitle("Make New Meme");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        /**
-         * Step 3
-         */
         // Get reference for cameraButton, create OnClickListener for
         // cameraButton and set OnclickListener for cameraButton
         Button cameraButton = (Button) findViewById(R.id.camera_button);
-        View.OnClickListener cameraButtonOnClick = getCameraOnClickListener();
-        cameraButton.setOnClickListener(cameraButtonOnClick);
 
-        /**
-         * Step 4
-         */
         // Get reference for galleryButton, create OnClickListener for
         // galleryButton and set OnclickListener for galleryButton
         Button galleryButton = (Button) findViewById(R.id.gallery_button);
-        View.OnClickListener galleryButtonOnClick = getGalleryOnClickListener();
-        galleryButton.setOnClickListener(galleryButtonOnClick);
 
-        /**
-         * Step 5
-         */
         // Get reference for saveButton, create OnClickListener for
         // saveButton and set OnclickListener for saveButton
         Button saveButton = (Button) findViewById(R.id.save_button);
-        View.OnClickListener saveButtonOnClick = getSaveOnClickListener();
-        saveButton.setOnClickListener(saveButtonOnClick);
     }
 
     /**
-     * Step 3
      * This method takes no method arguments and
      * will return the OnClickListener for the cameraButton
      */
@@ -123,12 +107,12 @@ public class NewMemeActivity extends AppCompatActivity {
         }
         //Else, the app DOES have camera permissions so open the camera!! :))
         else {
-            openCamera();
+            Toast.makeText(this, "You have permission! Now what?", Toast.LENGTH_LONG).show();
+            //TODO: open the camera
         }
     }
 
     /**
-     * Step 3
      *
      * The openCamera() method will:
      * (1) Creates an Intent named `takePictureIntent` to access the camera
@@ -143,7 +127,6 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * Step 4
      *
      * The getGalleryOnClickListener() will return the OnClickListener for the galleryButton
      */
@@ -161,7 +144,6 @@ public class NewMemeActivity extends AppCompatActivity {
     }
 
     /**
-     * Step 4
      *
      * The enterGalleryFlow method is responsible for managing the sequence of events
      * that need to occur before a user can navigate to the Galley. This method:
@@ -176,7 +158,8 @@ public class NewMemeActivity extends AppCompatActivity {
         if (storageReadPermissionGranted == false) {
             ActivityCompat.requestPermissions(this, GALLERY_PERMISSION, REQUEST_CODE_GALLERY);
         } else {
-            openGallery();
+            Toast.makeText(this, "You have permission! Now what?", Toast.LENGTH_LONG).show();
+            //todo: open the gallery
         }
     }
 
@@ -232,7 +215,8 @@ public class NewMemeActivity extends AppCompatActivity {
         if (!storageWritePermissionGranted) {
             ActivityCompat.requestPermissions(this, SAVE_PERMISSION, REQUEST_CODE_SAVE);
         } else {
-            saveMeme();
+            Toast.makeText(this, "You have permission! Now what?", Toast.LENGTH_LONG).show();
+            //todo: save the meme
         }
     }
 
@@ -279,25 +263,33 @@ public class NewMemeActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         /**
-         * Step 3
+         * Camera permissions
          */
         if (requestCode == REQUEST_CODE_CAMERA) {
             // did the user give us permission?
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCamera();
+                enterTakePictureFlow();
             } else {
                 Toast.makeText(this, "Need permissions to take a photo", Toast.LENGTH_LONG).show();
             }
         }
         /**
-         * Step 4
+         * Gallery Permissions
          */
         else if (requestCode == REQUEST_CODE_GALLERY) {
             // did the user give us permission?
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openGallery();
+                enterGalleryFlow();
             } else {
                 Toast.makeText(this, "Need permissions to select a photo", Toast.LENGTH_LONG).show();
+            }
+        }
+        else if (requestCode == REQUEST_CODE_SAVE) {
+            //did the user give us permission?
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                enterSaveMemeFlow();
+            } else {
+                Toast.makeText(this, "Need permissions to save", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -313,13 +305,10 @@ public class NewMemeActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /**
-         * Step 3
-         */
         if (requestCode == REQUEST_CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            setThumbnail(imageBitmap);
+            Toast.makeText(this, "You have a photo from the camera! Now what?", Toast.LENGTH_LONG).show();
         }
         /**
          * Step 4
@@ -328,7 +317,7 @@ public class NewMemeActivity extends AppCompatActivity {
             Uri imageUri = data.getData();
             try {
                 Bitmap image = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                setThumbnail(image);
+                Toast.makeText(this, "You have a photo from the gallery! Now what?", Toast.LENGTH_LONG).show();
             } catch (IOException e) {
                 e.printStackTrace();
             }
